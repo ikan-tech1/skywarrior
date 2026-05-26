@@ -8,7 +8,8 @@
 | Armed at | 2026-05-26T18:15:00Z (approx) |
 | Next wake | ~2 hours after armed |
 | Shell title | Loop dynamic: SkyWarrior Ace parity |
-| Iteration | 1 complete |
+| Iteration | 1 complete (commit 3b8fd0a pushed) |
+| Loop armed | yes — existing sleeper, not duplicated |
 
 ## Wake prompt
 
