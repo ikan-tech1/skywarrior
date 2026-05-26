@@ -3,7 +3,7 @@
 Living backlog cataloging every improvement category vs Ace Combat (mix) parity.  
 **Tiers:** P0 = vertical slice / MVP · P1 = mission OS + hangar alpha · P2 = campaign polish + MP
 
-Last updated: 2026-05-26 (loop iteration 1)
+Last updated: 2026-05-26 (urgent web render fix)
 
 ---
 
@@ -16,7 +16,7 @@ Last updated: 2026-05-26 (loop iteration 1)
 | HUD / UX | 3 | ~55% | Basic panels; missing lead, compass, alerts |
 | Mission | 2 | ~40% | JSON loader + web M01; no briefing UI in UE |
 | Metagame | 1 | ~15% | Hangar stub only |
-| World / VFX | 2 | ~25% | Placeholder geo; no Niagara |
+| World / VFX | 2 | ~45% | Web sky dome, coast, clouds, jet mesh |
 | Audio | 1 | ~30% | Lock tone stub this iteration |
 | Engineering | 2 | ~35% | Lock math helpers + script tests |
 
@@ -32,7 +32,7 @@ Last updated: 2026-05-26 (loop iteration 1)
 | FF-02 | Generous energy / recoverable stalls | P0 | ✅ Done | Stall assist active below 140 kt |
 | FF-03 | Post-stall maneuvers (AC7-style) | P1 | ⬜ | State machine + stamina cooldown |
 | FF-04 | Speed brake / flaps per aircraft | P1 | ⬜ | Data-driven from `UAircraftSpec` |
-| FF-05 | Chase camera lag + FOV punch | P0 | 🔶 | UE spring arm done; web chase only |
+| FF-05 | Chase camera lag + FOV punch | P0 | 🔶 | Web chase cam lag added; UE spring arm |
 | FF-06 | Cockpit camera toggle | P1 | ⬜ | Per-aircraft interior mesh |
 | FF-07 | Gamepad rumble on stall / hit | P2 | ⬜ | Enhanced Input haptics |
 | FF-08 | HOTAS full rebind UI | P1 | ⬜ | Settings screen |
@@ -47,7 +47,7 @@ Last updated: 2026-05-26 (loop iteration 1)
 |----|------|------|--------|--------|
 | CW-01 | Gun hitscan + damage | P0 | ✅ Done | `WeaponManager::FireGun` |
 | CW-02 | Gun lead indicator | P0 | 🔶 | Web lead pip this iter; UE `LockMath` |
-| CW-03 | Tracers + hit sparks VFX | P0 | 🔶 | Web particle lines this iter |
+| CW-03 | Tracers + hit sparks VFX | P0 | ✅ Done | Web Line tracers + spark meshes |
 | CW-04 | IR missile + lock pipeline | P0 | ✅ Done | 1s lock, cone check |
 | CW-05 | Lock tone (tracking vs locked) | P0 | 🔶 | Web Audio + UE delegate hook |
 | CW-06 | Radar / SEAD lock modes | P1 | ⬜ | Extend `UTargetingComponent` |
@@ -128,9 +128,9 @@ Last updated: 2026-05-26 (loop iteration 1)
 
 | ID | Item | Tier | Status | Action |
 |----|------|------|--------|--------|
-| WV-01 | Large outdoor theater | P1 | 🔶 | 80 km web ocean plane |
-| WV-02 | Port Kestrel landmark blocks | P0 | 🔶 | Placeholder city |
-| WV-03 | Day/dusk/night + weather | P1 | ⬜ | Sky atmosphere |
+| WV-01 | Large outdoor theater | P1 | 🔶 | 120 km ocean + sky dome |
+| WV-02 | Port Kestrel landmark blocks | P0 | ✅ Done | Harbor blocks + runway |
+| WV-03 | Day/dusk/night + weather | P1 | 🔶 | Gradient sky + cloud puffs |
 | WV-04 | Cloud layers fly-through | P2 | ⬜ | Niagara volumes |
 | WV-05 | Explosions + contrails | P1 | 🔶 | Web burst particles |
 | WV-06 | Afterburner / engine glow | P1 | ⬜ | Niagara |
@@ -196,7 +196,7 @@ Last updated: 2026-05-26 (loop iteration 1)
 | DF-04 | Photo mode | P2 | ⬜ | Free camera |
 | DF-05 | Advanced accessibility pack | P1 | ⬜ | See §9 |
 | DF-06 | Replay + share clips | P2 | 🔶 | Recorder stub |
-| DF-07 | Web playable vertical slice | P0 | ✅ Done | Vercel demo |
+| DF-07 | Web playable vertical slice | P0 | ✅ Done | Vercel demo — render fix 2026-05-26 |
 
 ---
 
@@ -207,6 +207,18 @@ Last updated: 2026-05-26 (loop iteration 1)
 - [x] UE: `LockMath.h` lead point + cone helpers; TargetingComponent exposes lead; lock tone delegate usage doc
 - [x] `scripts/test_lock_math.py` verification
 - [x] LOOP_STATE.md + 2h dynamic heartbeat
+
+## Urgent fix — web render (2026-05-26)
+
+- [x] **Root cause:** No player aircraft mesh in scene; flat fog-matched blue background read as empty void; tracers never drawn to Three.js scene
+- [x] Player VF-1 jet mesh (fuselage/wings/tail/canopy) + chase camera lag
+- [x] Sky gradient dome, sun/hemisphere lights, ocean + coast, Port Kestrel blocks, clouds
+- [x] Enemy fighters as jet meshes; SAM sites with dish + marker cone
+- [x] `importmap` for reliable Three.js module load on Vercel
+- [x] Mission JSON fetch from `missions/M01_first_light.json`
+- [x] `prototype/web-flight/README.md` controls table
+- [ ] Mouse look / gamepad — still keyboard-only
+- [ ] GLTF aircraft art pass — procedural mesh placeholder
 
 ---
 
