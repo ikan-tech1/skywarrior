@@ -19,7 +19,9 @@ cd prototype/web-flight
 python3 -m http.server 8080
 ```
 
-Open [http://localhost:8080](http://localhost:8080)
+Open [http://localhost:8080](http://localhost:8080) — click **LAUNCH SORTIE** on the briefing card to start.
+
+You should see your VF-1 jet in third-person chase view over ocean, coast, and Port Kestrel landmarks (not a flat blue void).
 
 | Control | Action |
 |---------|--------|

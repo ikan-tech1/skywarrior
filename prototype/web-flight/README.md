@@ -1,29 +1,34 @@
 # SkyWarrior Web Flight Prototype
 
-Playable M01 vertical slice (Three.js) deployed at [https://skywarrior.vercel.app](https://skywarrior.vercel.app).
+Browser vertical slice for **M01 — First Light**. Deployed at [skywarrior.vercel.app](https://skywarrior.vercel.app).
+
+## Run locally
+
+```bash
+python3 -m http.server 8080
+```
+
+Open http://localhost:8080 and click **LAUNCH SORTIE**.
 
 ## Controls
 
-| Input | Action |
-|-------|--------|
-| **W** / **S** | Throttle up / down |
-| **↑** / **↓** | Pitch up / down |
-| **A** / **D** | Roll left / right |
-| **Q** / **E** | Yaw left / right |
-| **Space** | Gun (hold or tap) |
-| **F** | IR missile (requires lock) |
-| **R** | Restart sortie |
+| Key | Action |
+|-----|--------|
+| W / S | Throttle up / down |
+| ↑ / ↓ | Pitch |
+| A / D | Roll |
+| Q / E | Yaw |
+| Space | Gun (Vulcan-20) |
+| F | IR missile (requires lock) |
+| R | Restart mission |
 
-1. Click **LAUNCH SORTIE** on the briefing card.
-2. Fly toward red hostile fighters; orange ground markers are SAM sites.
-3. Hold target in view ~1s for lock, then press **F** for missile or use **Space** for gun.
+## What you should see
 
-## Local dev
+- Third-person chase camera behind your VF-1 jet mesh
+- Gradient sky, ocean, green coast, Port Kestrel harbor blocks
+- Red hostile fighters and orange SAM blips on radar
+- AC-style HUD: compass, speed/alt tapes, lock box, lead pip
 
-```bash
-cd prototype/web-flight
-python3 -m http.server 8765
-# open http://127.0.0.1:8765
-```
+## Deploy
 
-Mission data: `missions/M01_first_light.json`.
+Vercel serves `prototype/web-flight` per root `vercel.json`. Use relative `./main.js` and `./missions/*.json` paths.
