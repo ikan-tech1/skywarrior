@@ -760,7 +760,22 @@ function startMission() {
   restart();
 }
 
+function normalizeSpawns(data) {
+  const sp = data.spawns;
+  if (Array.isArray(sp)) {
+    return {
+      air: sp.filter((s) => s.type === 'air').flatMap((s) => s.positions || []),
+      ground: sp.filter((s) => s.type === 'ground').flatMap((s) => s.positions || []),
+    };
+  }
+  if (sp && (sp.air || sp.ground)) {
+    return { air: sp.air || [], ground: sp.ground || [] };
+  }
+  return { ...FALLBACK_MISSION.spawns };
+}
+
 function applyMissionData(data) {
+  const spawns = normalizeSpawns(data);
   MISSION = {
     ...FALLBACK_MISSION,
     ...data,
@@ -774,16 +789,9 @@ function applyMissionData(data) {
       line: r.line,
       at: r.at ?? r.delay ?? 0,
     })),
-    spawns: {
-      air: (data.spawns || [])
-        .filter((s) => s.type === 'air')
-        .flatMap((s) => s.positions || []),
-      ground: (data.spawns || [])
-        .filter((s) => s.type === 'ground')
-        .flatMap((s) => s.positions || []),
-    },
+    spawns,
   };
-  if (!MISSION.spawns.air?.length) MISSION.spawns = FALLBACK_MISSION.spawns;
+  if (!MISSION.spawns.air?.length) MISSION.spawns = { ...FALLBACK_MISSION.spawns };
 
   mission.timeLimit = MISSION.timeLimitSeconds || 600;
   mission.objectives = MISSION.objectives.map((o) => ({ ...o, count: 0, done: false }));
