@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWarrior — Flight Prototype</title>
+  <style>
+    * { margin: 0; box-sizing: border-box; }
+    body { overflow: hidden; background: #050810; font-family: system-ui, sans-serif; color: #c8e6ff; }
+    canvas { display: block; width: 100vw; height: 100vh; }
+    #hud {
+      position: fixed; inset: 0; pointer-events: none;
+      display: grid; grid-template-rows: auto 1fr auto;
+    }
+    .panel { padding: 12px 16px; }
+    .top { display: flex; justify-content: space-between; }
+    .objectives { font-size: 14px; line-height: 1.5; }
+    .timer { font-size: 18px; color: #ffd166; }
+    .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .flight { font-size: 16px; font-variant-numeric: tabular-nums; }
+    .weapon { text-align: right; }
+    .lock-box {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 80px; height: 80px; border: 2px solid rgba(255,80,80,0);
+      transition: border-color 0.1s;
+    }
+    .lock-box.tracking { border-color: rgba(255,200,80,0.8); }
+    .lock-box.locked { border-color: rgba(255,60,60,1); box-shadow: 0 0 12px rgba(255,60,60,0.5); }
+    #radar {
+      width: 120px; height: 120px; border-radius: 50%;
+      border: 2px solid #3a6ea5; background: rgba(0,20,40,0.6);
+      position: relative;
+    }
+    .blip { position: absolute; width: 6px; height: 6px; background: #ff4444; border-radius: 50%; transform: translate(-50%, -50%); }
+    #help {
+      position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; opacity: 0.6; text-align: center;
+    }
+    #msg { position: fixed; top: 40%; width: 100%; text-align: center; font-size: 28px; font-weight: bold; opacity: 0; transition: opacity 0.3s; }
+    #msg.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="hud">
+    <div class="panel top">
+      <div class="objectives" id="objectives"></div>
+      <div id="radar"></div>
+    </div>
+    <div class="lock-box" id="lockBox"></div>
+    <div class="panel bottom">
+      <div class="flight" id="flight"></div>
+      <div class="weapon" id="weapon"></div>
+    </div>
+  </div>
+  <div id="msg"></div>
+  <div id="help">W/S throttle · A/D roll · ↑/↓ pitch · Q/E yaw · Space gun · F missile · R restart</div>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

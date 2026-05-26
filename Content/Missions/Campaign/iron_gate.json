@@ -1,0 +1,11 @@
+{
+  "missionId": "iron_gate",
+  "title": "Iron Gate",
+  "description": "Suppress the Iron Gate SAM complex.",
+  "timeLimitSeconds": 720,
+  "objectives": [
+    { "id": "obj_sam1", "type": "destroy_ground", "description": "Destroy SAM radar", "count": 1 },
+    { "id": "obj_sam2", "type": "destroy_ground", "description": "Destroy launchers", "count": 3 }
+  ],
+  "template": "sead"
+}

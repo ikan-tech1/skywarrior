@@ -1,0 +1,32 @@
+# Unreal Engine
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+*.sln
+*.xcodeproj
+*.xcworkspace
+.vs/
+*.VC.db
+*.opensdf
+*.sdf
+*.suo
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+
+# Node / Vercel
+node_modules/
+.vercel/
+npm-debug.log*
+yarn-error.log*
+
+# Prototype
+prototype/web-flight/node_modules/

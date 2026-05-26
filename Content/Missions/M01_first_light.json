@@ -1,0 +1,36 @@
+{
+  "missionId": "M01_first_light",
+  "title": "First Light",
+  "briefing": "Viper Squadron, clear Ashford Shrike patrol over Port Kestrel. Destroy 2 enemy fighters and 3 SAM sites. AWACS Meridian Eye is on station.",
+  "timeLimitSeconds": 600,
+  "theater": "Port Kestrel",
+  "playerAircraft": "VF-1",
+  "loadout": {
+    "gun": "VUL-20",
+    "missiles": ["SKR-IR", "SKR-IR", "SKR-IR", "SKR-IR"]
+  },
+  "spawns": [
+    { "type": "EnemyFighter", "class": "AS-9 Shrike", "count": 2, "area": "PatrolAlpha" },
+    { "type": "SAMSite", "class": "SA-3 Static", "count": 3, "area": "HarborDefense" }
+  ],
+  "objectives": [
+    {
+      "id": "OBJ_AIR",
+      "type": "destroyAir",
+      "description": "Destroy enemy fighters",
+      "count": 2
+    },
+    {
+      "id": "OBJ_GROUND",
+      "type": "destroyGround",
+      "description": "Destroy SAM sites",
+      "count": 3
+    }
+  ],
+  "radio": [
+    { "speaker": "Meridian Eye", "line": "Viper-1, hostile contacts bearing 270 over the harbor.", "priority": 2 },
+    { "speaker": "Solano", "line": "Stay on the bandits — SAMs will light up if you drop low.", "priority": 1 }
+  ],
+  "winCondition": "all_objectives_complete",
+  "failCondition": "time_expired"
+}

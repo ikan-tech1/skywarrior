@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "",
+  "outputDirectory": "prototype/web-flight",
+  "framework": null,
+  "cleanUrls": true
+}

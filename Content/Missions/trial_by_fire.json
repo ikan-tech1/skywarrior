@@ -1,0 +1,40 @@
+{
+  "missionId": "trial_by_fire",
+  "title": "Trial by Fire",
+  "description": "Clear hostile air and SAM sites over the Meridian training corridor.",
+  "timeLimitSeconds": 600,
+  "briefing": {
+    "speaker": "Suri Okonkwo",
+    "text": "Viper-1, welcome to the war. Two Hawker-12s are patrolling sector seven. Iron Gate SAM battery is active. Clear the skies, then suppress the site."
+  },
+  "objectives": [
+    {
+      "id": "obj_air",
+      "type": "destroy_air",
+      "description": "Destroy enemy fighters",
+      "count": 2,
+      "tags": ["enemy_fighter"]
+    },
+    {
+      "id": "obj_sam",
+      "type": "destroy_ground",
+      "description": "Destroy SAM site",
+      "count": 1,
+      "tags": ["sam_site"]
+    }
+  ],
+  "spawns": [
+    { "class": "EnemyFighter", "tag": "enemy_fighter", "location": [12000, 5000, 300000] },
+    { "class": "EnemyFighter", "tag": "enemy_fighter", "location": [14000, -3000, 310000] },
+    { "class": "SAMSite", "tag": "sam_site", "location": [20000, 0, 0] }
+  ],
+  "checkpoints": [
+    { "id": "cp_after_air", "trigger": "obj_air_complete" }
+  ],
+  "winCondition": "all_objectives",
+  "rankThresholds": {
+    "S": { "timePercent": 0.6, "maxDamage": 10 },
+    "A": { "timePercent": 0.8, "maxDamage": 30 },
+    "B": { "timePercent": 1.0, "maxDamage": 50 }
+  }
+}

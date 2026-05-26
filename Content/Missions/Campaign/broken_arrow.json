@@ -1,0 +1,10 @@
+{
+  "missionId": "broken_arrow",
+  "title": "Broken Arrow",
+  "description": "Duel ace Red Talon over Cinder Islands.",
+  "timeLimitSeconds": 900,
+  "objectives": [
+    { "id": "obj_ace", "type": "destroy_air", "description": "Shoot down Red Talon", "count": 1, "tags": ["ace_red_talon"] }
+  ],
+  "template": "ace_duel"
+}

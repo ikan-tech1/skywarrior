@@ -1,0 +1,11 @@
+{
+  "missionId": "last_meridian",
+  "title": "Last Meridian",
+  "description": "Final assault on Meridian Spire.",
+  "timeLimitSeconds": 1200,
+  "objectives": [
+    { "id": "obj_defense", "type": "destroy_air", "description": "Clear interceptors", "count": 4 },
+    { "id": "obj_spire", "type": "destroy_ground", "description": "Destroy Spire core", "count": 1 }
+  ],
+  "template": "assault"
+}
