@@ -24,8 +24,8 @@ Legend: ✅ planned in phase | 🔶 stub | ⬜ deferred
 
 | Feature | Reference genre | P0 | P1 | P2 | Notes |
 |---------|-----------------|----|----|-----|-------|
-| Gun + tracers + hit sparks | All | ✅ | | | Hitscan default |
-| IR missile + lock tone | All | ✅ | | | `UTargetingComponent` |
+| Gun + tracers + hit sparks | All | ✅ | | | Hitscan + web VFX; UE OnGunFired |
+| IR missile + lock tone | All | ✅ | | | Web Audio + UTargetingComponent |
 | Radar / special lock modes | Mix | | ✅ | | SEAD, multi-lock |
 | Standard missiles + SPW slots | All | | ✅ | | `UWeaponDefinition` |
 | Special weapons roster (6+) | Mix | | ✅ | | Data-driven |
@@ -54,7 +54,7 @@ Legend: ✅ planned in phase | 🔶 stub | ⬜ deferred
 
 | Feature | Reference genre | P0 | P1 | P2 | Notes |
 |---------|-----------------|----|----|-----|-------|
-| Briefing (map + text) | All | 🔶 | ✅ | | Card → full screen |
+| Briefing (map + text) | All | ✅ | ✅ | | Web card from JSON |
 | Debriefing + rank S–D | All | | ✅ | | Rank calculator |
 | Mission types (6 archetypes) | Mix | 🔶 | ✅ | | Templates in Phase 2 |
 | Checkpoints + retry | AC7 | | ✅ | | Subsystem |

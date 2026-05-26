@@ -6,6 +6,7 @@
 
 class UInputMappingContext;
 class UUserWidget;
+class UCombatHUDWidget;
 
 UCLASS()
 class SKYWARRIOR_API ASkyWarriorPlayerController : public APlayerController
@@ -15,9 +16,13 @@ class SKYWARRIOR_API ASkyWarriorPlayerController : public APlayerController
 public:
 	ASkyWarriorPlayerController();
 
+	UFUNCTION(BlueprintPure, Category = "UI")
+	UCombatHUDWidget* GetCombatHUD() const;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
@@ -28,4 +33,6 @@ protected:
 private:
 	UPROPERTY()
 	TObjectPtr<UUserWidget> CombatHUDWidget;
+
+	void RefreshCombatHUD();
 };

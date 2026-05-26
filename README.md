@@ -80,7 +80,7 @@ prototype/web-flight/  Three.js vertical slice demo
 | [IP_BIBLE](docs/IP_BIBLE.md) | Nations, squadrons, aces, 8-mission outline |
 | [FLIGHT_ACCEPTANCE](docs/FLIGHT_ACCEPTANCE.md) | Five maneuver drills |
 | [UE5_SETUP](docs/UE5_SETUP.md) | Engine install and compile |
-| [ROADMAP](docs/ROADMAP.md) | Phases 0–5 + multiplayer notes |
+| [IMPROVEMENT_PLAN](docs/IMPROVEMENT_PLAN.md) | Prioritized parity backlog (P0/P1/P2) |
 | [RISK_REGISTER](docs/RISK_REGISTER.md) | Project risks |
 
 ---

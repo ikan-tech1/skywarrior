@@ -22,6 +22,15 @@ class SKYWARRIOR_API APlayerAircraft : public APawn
 public:
 	APlayerAircraft();
 
+	UFUNCTION(BlueprintPure, Category = "Flight")
+	UFlightDynamicsComponent* GetFlightDynamics() const { return FlightDynamics; }
+
+	UFUNCTION(BlueprintPure, Category = "Weapons")
+	UWeaponManager* GetWeaponManager() const { return WeaponManager; }
+
+	UFUNCTION(BlueprintPure, Category = "Weapons")
+	UTargetingComponent* GetTargeting() const { return Targeting; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;

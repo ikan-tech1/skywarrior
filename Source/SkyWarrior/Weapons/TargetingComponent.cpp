@@ -62,10 +62,10 @@ AActor* UTargetingComponent::FindBestTarget() const
 			continue;
 		}
 
-		const float Dist = FVector::Dist(GetOwner()->GetActorLocation(), Actor->GetActorLocation());
-		if (Dist <= MaxLockRangeMeters && Dist < BestDist && IsTargetInCone(Actor))
+		const float DistMeters = FVector::Dist(GetOwner()->GetActorLocation(), Actor->GetActorLocation()) / 100.f;
+		if (DistMeters <= MaxLockRangeMeters && DistMeters < BestDist && IsTargetInCone(Actor))
 		{
-			BestDist = Dist;
+			BestDist = DistMeters;
 			Best = Actor;
 		}
 	}
