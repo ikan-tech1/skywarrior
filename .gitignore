@@ -28,5 +28,11 @@ node_modules/
 npm-debug.log*
 yarn-error.log*
 
-# Prototype
-prototype/web-flight/node_modules/
+# Node / Vercel
+node_modules/
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+.vercel
