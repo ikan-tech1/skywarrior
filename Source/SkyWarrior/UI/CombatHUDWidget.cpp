@@ -23,3 +23,22 @@ void UCombatHUDWidget::UpdateWeaponStatus(const FText& WeaponName, int32 Ammo, i
 {
 	OnHUDRefresh();
 }
+
+void UCombatHUDWidget::UpdateTargetData(float DistanceMeters, const FVector& GunLeadPoint)
+{
+	DisplayTargetDistanceMeters = DistanceMeters;
+	DisplayGunLeadPoint = GunLeadPoint;
+	OnHUDRefresh();
+}
+
+void UCombatHUDWidget::UpdateHeading(float HeadingDegrees)
+{
+	DisplayHeadingDegrees = HeadingDegrees;
+	OnHUDRefresh();
+}
+
+void UCombatHUDWidget::SetMissileAlert(bool bActive)
+{
+	bDisplayMissileAlert = bActive;
+	OnHUDRefresh();
+}

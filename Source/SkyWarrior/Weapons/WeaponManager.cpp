@@ -52,7 +52,25 @@ void UWeaponManager::FireGun(AActor* Target)
 	}
 
 	GunAmmo--;
-	PerformHitscan(Target, GunRangeMeters, GunDamage);
+
+	AActor* Owner = GetOwner();
+	FVector Muzzle = Owner ? Owner->GetActorLocation() : FVector::ZeroVector;
+	FVector Impact = Muzzle;
+
+	if (Owner)
+	{
+		Impact = Muzzle + Owner->GetActorForwardVector() * GunRangeMeters * 100.f;
+	}
+
+	if (PerformHitscan(Target, GunRangeMeters, GunDamage))
+	{
+		if (Target)
+		{
+			Impact = Target->GetActorLocation();
+		}
+	}
+
+	OnGunFired.Broadcast(Muzzle, Impact);
 }
 
 void UWeaponManager::FireMissile(AActor* Target)

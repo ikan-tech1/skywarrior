@@ -39,6 +39,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Targeting")
 	float GetLockProgress() const { return LockProgress; }
 
+	/** Lead aim point for gun reticle (constant-velocity approximation). */
+	UFUNCTION(BlueprintPure, Category = "Targeting")
+	FVector GetLeadAimPoint(float ProjectileSpeedMetersPerSec = 900.f) const;
+
+	UFUNCTION(BlueprintPure, Category = "Targeting")
+	float GetTargetDistanceMeters() const;
+
 	UPROPERTY(BlueprintAssignable, Category = "Targeting")
 	FOnLockStateChanged OnLockStateChanged;
 

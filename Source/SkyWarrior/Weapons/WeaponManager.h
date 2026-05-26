@@ -6,6 +6,8 @@
 
 class UWeaponDefinition;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGunFired, const FVector&, MuzzleLocation, const FVector&, ImpactLocation);
+
 UCLASS(ClassGroup = (Weapons), meta = (BlueprintSpawnableComponent))
 class SKYWARRIOR_API UWeaponManager : public UActorComponent
 {
@@ -27,6 +29,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Weapons")
 	int32 GetMissileCount() const { return MissileCount; }
+
+	UPROPERTY(BlueprintAssignable, Category = "Weapons")
+	FOnGunFired OnGunFired;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
 	float GunDamage = 8.f;

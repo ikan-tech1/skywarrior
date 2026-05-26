@@ -3,55 +3,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyWarrior — Flight Prototype</title>
+  <title>SkyWarrior — M01 First Light</title>
   <style>
     * { margin: 0; box-sizing: border-box; }
-    body { overflow: hidden; background: #050810; font-family: system-ui, sans-serif; color: #c8e6ff; }
+    body { overflow: hidden; background: #050810; font-family: "Segoe UI", system-ui, sans-serif; color: #c8e6ff; }
     canvas { display: block; width: 100vw; height: 100vh; }
-    #hud {
-      position: fixed; inset: 0; pointer-events: none;
-      display: grid; grid-template-rows: auto 1fr auto;
+    #hud { position: fixed; inset: 0; pointer-events: none; }
+    .hud-frame { position: absolute; inset: 16px; border: 1px solid rgba(58,110,165,0.35); border-radius: 2px; }
+    .top-bar { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 24px; align-items: flex-start; }
+    .objectives {
+      min-width: 280px; padding: 10px 14px;
+      background: rgba(0,20,40,0.75); border-left: 3px solid #3a6ea5;
+      font-size: 13px; line-height: 1.55;
     }
-    .panel { padding: 12px 16px; }
-    .top { display: flex; justify-content: space-between; }
-    .objectives { font-size: 14px; line-height: 1.5; }
-    .timer { font-size: 18px; color: #ffd166; }
-    .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
-    .flight { font-size: 16px; font-variant-numeric: tabular-nums; }
-    .weapon { text-align: right; }
-    .lock-box {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 80px; height: 80px; border: 2px solid rgba(255,80,80,0);
-      transition: border-color 0.1s;
-    }
-    .lock-box.tracking { border-color: rgba(255,200,80,0.8); }
-    .lock-box.locked { border-color: rgba(255,60,60,1); box-shadow: 0 0 12px rgba(255,60,60,0.5); }
+    .objectives h2 { font-size: 11px; letter-spacing: 0.12em; color: #7eb8ff; margin-bottom: 6px; }
+    .timer { font-size: 20px; color: #ffd166; font-variant-numeric: tabular-nums; margin-top: 4px; }
+    #radar-wrap { position: absolute; top: 24px; right: 32px; text-align: center; }
     #radar {
-      width: 120px; height: 120px; border-radius: 50%;
-      border: 2px solid #3a6ea5; background: rgba(0,20,40,0.6);
-      position: relative;
+      width: 130px; height: 130px; border-radius: 50%;
+      border: 2px solid #3a6ea5; background: radial-gradient(circle, rgba(0,40,80,0.8) 0%, rgba(0,15,30,0.9) 100%);
+      position: relative; overflow: hidden;
     }
-    .blip { position: absolute; width: 6px; height: 6px; background: #ff4444; border-radius: 50%; transform: translate(-50%, -50%); }
+    #radar::before, #radar::after { content: ''; position: absolute; background: rgba(58,110,165,0.25); }
+    #radar::before { width: 1px; height: 100%; left: 50%; }
+    #radar::after { height: 1px; width: 100%; top: 50%; }
+    .blip { position: absolute; width: 7px; height: 7px; background: #ff4444; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 6px #ff4444; }
+    .blip.ground { background: #ffaa44; box-shadow: 0 0 6px #ffaa44; }
+    .radar-label { font-size: 10px; color: #5a8ab5; margin-top: 4px; letter-spacing: 0.1em; }
+    #compass {
+      position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+      width: min(420px, 40vw); height: 28px; overflow: hidden;
+      background: rgba(0,20,40,0.6); border: 1px solid rgba(58,110,165,0.5);
+      margin-top: -36px;
+    }
+    #compass-strip { position: absolute; top: 0; height: 100%; display: flex; align-items: center; white-space: nowrap; font-size: 11px; font-variant-numeric: tabular-nums; }
+    #compass-strip span { display: inline-block; width: 40px; text-align: center; color: #8ab4d4; }
+    #compass-strip span.major { color: #ffd166; font-weight: 600; }
+    #compass-marker { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: #ff6666; }
+    .tape { position: absolute; font-size: 14px; font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
+    #speed-tape { left: 32px; top: 50%; transform: translateY(-50%); text-align: right; line-height: 1.35; }
+    #speed-tape .val { font-size: 22px; color: #fff; }
+    #alt-tape { right: 32px; top: 50%; transform: translateY(-50%); line-height: 1.35; }
+    #alt-tape .val { font-size: 22px; color: #fff; }
+    #weapon-panel {
+      position: absolute; bottom: 28px; right: 32px; text-align: right;
+      font-size: 13px; line-height: 1.5; background: rgba(0,20,40,0.5); padding: 8px 12px;
+    }
+    #reticle {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 48px; height: 48px; pointer-events: none;
+    }
+    #reticle::before, #reticle::after { content: ''; position: absolute; background: rgba(100,200,255,0.7); }
+    #reticle::before { width: 2px; height: 100%; left: 50%; transform: translateX(-50%); }
+    #reticle::after { height: 2px; width: 100%; top: 50%; transform: translateY(-50%); }
+    #lead-pip {
+      position: fixed; width: 10px; height: 10px; border-radius: 50%;
+      border: 2px solid rgba(255,220,80,0.9); transform: translate(-50%, -50%);
+      display: none; pointer-events: none;
+    }
+    .lock-box {
+      position: fixed; transform: translate(-50%, -50%);
+      border: 2px solid transparent; pointer-events: none; transition: border-color 0.08s;
+    }
+    .lock-box.tracking { border-color: rgba(255,200,80,0.85); width: 72px; height: 72px; }
+    .lock-box.locked { border-color: rgba(255,60,60,1); width: 88px; height: 88px; box-shadow: 0 0 14px rgba(255,60,60,0.45); }
+    .lock-label { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #ff8888; white-space: nowrap; }
+    #radio {
+      position: absolute; bottom: 100px; left: 32px; max-width: 420px;
+      font-size: 13px; line-height: 1.45; opacity: 0; transition: opacity 0.25s;
+    }
+    #radio.show { opacity: 1; }
+    #radio .speaker { color: #ffd166; font-weight: 600; font-size: 11px; letter-spacing: 0.08em; }
+    #alert {
+      position: fixed; top: 18%; width: 100%; text-align: center;
+      font-size: 22px; font-weight: 700; color: #ff4444; letter-spacing: 0.15em;
+      opacity: 0; transition: opacity 0.15s; text-shadow: 0 0 12px rgba(255,0,0,0.6);
+    }
+    #alert.show { opacity: 1; animation: blink 0.4s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0.3; } }
+    #msg { position: fixed; top: 42%; width: 100%; text-align: center; font-size: 28px; font-weight: bold; opacity: 0; transition: opacity 0.3s; }
+    #msg.show { opacity: 1; }
     #help {
       position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%);
-      font-size: 11px; opacity: 0.6; text-align: center;
+      font-size: 11px; opacity: 0.55; text-align: center; pointer-events: none;
     }
-    #msg { position: fixed; top: 40%; width: 100%; text-align: center; font-size: 28px; font-weight: bold; opacity: 0; transition: opacity 0.3s; }
-    #msg.show { opacity: 1; }
+    #briefing, #debrief {
+      position: fixed; inset: 0; background: rgba(5,8,16,0.92); display: flex;
+      align-items: center; justify-content: center; z-index: 10; pointer-events: auto;
+    }
+    #debrief { display: none; }
+    .card {
+      max-width: 520px; padding: 28px 32px; border: 1px solid #3a6ea5;
+      background: linear-gradient(135deg, rgba(10,30,60,0.95), rgba(5,15,35,0.98));
+    }
+    .card h1 { font-size: 22px; color: #ffd166; margin-bottom: 4px; }
+    .card .meta { font-size: 12px; color: #7eb8ff; margin-bottom: 16px; }
+    .card p { font-size: 14px; line-height: 1.6; margin-bottom: 16px; color: #b8d4ee; }
+    .card ul { font-size: 13px; line-height: 1.7; margin-bottom: 20px; padding-left: 18px; color: #a8c8e8; }
+    .card button {
+      background: #3a6ea5; color: #fff; border: none; padding: 10px 24px;
+      font-size: 14px; cursor: pointer; letter-spacing: 0.06em;
+    }
+    .card button:hover { background: #4a8ec5; }
+    .rank { font-size: 64px; color: #ffd166; text-align: center; margin: 12px 0; }
   </style>
 </head>
 <body>
   <canvas id="c"></canvas>
-  <div id="hud">
-    <div class="panel top">
-      <div class="objectives" id="objectives"></div>
+  <div id="briefing">
+    <div class="card">
+      <h1>M01 — First Light</h1>
+      <div class="meta">PORT KESTREL · VIPER SQUADRON · VF-1</div>
+      <p id="brief-text">Viper Squadron, clear Ashford Shrike patrol over Port Kestrel. Destroy 2 enemy fighters and 3 SAM sites. AWACS Meridian Eye is on station.</p>
+      <ul id="brief-objs"></ul>
+      <button id="startBtn">LAUNCH SORTIE</button>
+    </div>
+  </div>
+  <div id="debrief">
+    <div class="card">
+      <h1>Mission Complete</h1>
+      <div class="rank" id="rank">S</div>
+      <p id="debrief-stats"></p>
+      <button id="retryBtn">RETRY</button>
+    </div>
+  </div>
+  <div id="hud" style="display:none">
+    <div class="hud-frame"></div>
+    <div id="compass"><div id="compass-strip"></div><div id="compass-marker"></div></div>
+    <div class="top-bar">
+      <div class="objectives">
+        <h2>OBJECTIVES</h2>
+        <div id="objectives"></div>
+        <div class="timer" id="timer">T-10:00</div>
+      </div>
+    </div>
+    <div id="radar-wrap">
       <div id="radar"></div>
+      <div class="radar-label">RDR</div>
     </div>
-    <div class="lock-box" id="lockBox"></div>
-    <div class="panel bottom">
-      <div class="flight" id="flight"></div>
-      <div class="weapon" id="weapon"></div>
-    </div>
+    <div class="tape" id="speed-tape"><div>SPD</div><div class="val" id="spd-val">450</div><div>KT</div></div>
+    <div class="tape" id="alt-tape"><div>ALT</div><div class="val" id="alt-val">5000</div><div>FT</div></div>
+    <div id="weapon-panel"></div>
+    <div id="reticle"></div>
+    <div id="lead-pip"></div>
+    <div class="lock-box" id="lockBox"><span class="lock-label" id="lockLabel"></span></div>
+    <div id="radio"><div class="speaker" id="radioSpeaker"></div><div id="radioText"></div></div>
+    <div id="alert">MISSILE</div>
   </div>
   <div id="msg"></div>
   <div id="help">W/S throttle · A/D roll · ↑/↓ pitch · Q/E yaw · Space gun · F missile · R restart</div>

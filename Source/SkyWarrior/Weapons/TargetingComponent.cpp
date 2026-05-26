@@ -1,4 +1,5 @@
 #include "Weapons/TargetingComponent.h"
+#include "Weapons/LockMath.h"
 #include "AI/DamageableUnit.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -22,6 +23,16 @@ void UTargetingComponent::SetLockState(ELockState NewState)
 	}
 }
 
+float UTargetingComponent::GetTargetDistanceMeters() const
+{
+	if (!CurrentTarget.IsValid() || !GetOwner())
+	{
+		return -1.f;
+	}
+
+	return FVector::Dist(GetOwner()->GetActorLocation(), CurrentTarget->GetActorLocation()) / 100.f;
+}
+
 bool UTargetingComponent::IsTargetInCone(AActor* Target) const
 {
 	if (!Target || !GetOwner())
@@ -29,10 +40,11 @@ bool UTargetingComponent::IsTargetInCone(AActor* Target) const
 		return false;
 	}
 
-	const FVector ToTarget = (Target->GetActorLocation() - GetOwner()->GetActorLocation()).GetSafeNormal();
-	const float Dot = FVector::DotProduct(GetOwner()->GetActorForwardVector(), ToTarget);
-	const float ConeCos = FMath::Cos(FMath::DegreesToRadians(LockConeDegrees));
-	return Dot >= ConeCos;
+	return SkyWarriorLockMath::IsTargetInLockCone(
+		GetOwner()->GetActorLocation(),
+		GetOwner()->GetActorForwardVector(),
+		Target->GetActorLocation(),
+		LockConeDegrees);
 }
 
 AActor* UTargetingComponent::FindBestTarget() const
@@ -77,7 +89,7 @@ void UTargetingComponent::UpdateLock(float DeltaTime)
 	if (LockState == ELockState::Searching || LockState == ELockState::Tracking)
 	{
 		SetLockState(ELockState::Tracking);
-		LockProgress += DeltaTime / FMath::Max(LockTimeSeconds, 0.1f);
+		LockProgress = SkyWarriorLockMath::LockProgressForDeltaTime(LockProgress, DeltaTime, LockTimeSeconds);
 		if (LockProgress >= 1.f)
 		{
 			SetLockState(ELockState::Locked);
@@ -92,6 +104,25 @@ void UTargetingComponent::UpdateLock(float DeltaTime)
 	{
 		SetLockState(ELockState::Searching);
 	}
+}
+
+FVector UTargetingComponent::GetLeadAimPoint(float ProjectileSpeedMetersPerSec) const
+{
+	if (!GetOwner() || !CurrentTarget.IsValid())
+	{
+		return GetOwner() ? GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * 5000.f : FVector::ZeroVector;
+	}
+
+	AActor* Target = CurrentTarget.Get();
+	const FVector TargetVel = Target->GetVelocity();
+	const FVector ShooterVel = GetOwner()->GetVelocity();
+
+	return SkyWarriorLockMath::ComputeLeadAimPoint(
+		GetOwner()->GetActorLocation(),
+		ShooterVel,
+		Target->GetActorLocation(),
+		TargetVel,
+		ProjectileSpeedMetersPerSec);
 }
 
 void UTargetingComponent::TickComponent(float DeltaTime, ELevelTick TickType,
