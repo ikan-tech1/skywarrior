@@ -4,6 +4,10 @@ Original arcade military flight combat game — Ace Combat–class feel, indie s
 
 **IP:** Free Meridian Coalition vs Ashford Directorate. Player: **Lt. Kai Ren**, Viper Squadron.
 
+**Repository:** [github.com/ikan-tech1/skywarrior](https://github.com/ikan-tech1/skywarrior)
+
+**Live demo (web prototype):** [skywarrior.vercel.app](https://skywarrior.vercel.app)
+
 ---
 
 ## Quick start (no UE required)
@@ -11,7 +15,7 @@ Original arcade military flight combat game — Ace Combat–class feel, indie s
 Play the **web flight prototype** for M01 "First Light" loop:
 
 ```bash
-cd /Users/eashangupta/Projects/skywarrior/prototype/web-flight
+cd prototype/web-flight
 python3 -m http.server 8080
 ```
 
@@ -36,7 +40,7 @@ Open [http://localhost:8080](http://localhost:8080)
 See **`docs/UE5_SETUP.md`** for full install and compile steps.
 
 ```bash
-open /Users/eashangupta/Projects/skywarrior/SkyWarrior.uproject
+open SkyWarrior.uproject
 ```
 
 First launch: allow module compile. Create map `Content/Maps/FlightTuning` per `Content/Maps/FlightTuning.README.md`.

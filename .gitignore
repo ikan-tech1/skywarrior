@@ -25,14 +25,8 @@ Thumbs.db
 # Node / Vercel
 node_modules/
 .vercel/
-npm-debug.log*
-yarn-error.log*
-
-# Node / Vercel
-node_modules/
-.vercel/
 
 # Logs
 *.log
 npm-debug.log*
-.vercel
+yarn-error.log*
